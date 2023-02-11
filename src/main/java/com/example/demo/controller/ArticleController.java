@@ -44,7 +44,8 @@ public class ArticleController {
 				return new ResponseEntity<>(HttpStatus.CONFLICT);
 			}
 			Article newArticle = new Article();
-			articleRepo.save(newArticle)
+			articleRepo.save(newArticle);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
