@@ -18,7 +18,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 
 	@Id
@@ -34,6 +34,8 @@ public class User {
 	@Column(name = "password")
 	private String password;
 	
+    private boolean loggedIn;
+	
 	@ManyToMany(cascade = {
         CascadeType.ALL
     })
@@ -44,6 +46,15 @@ public class User {
 			)
 	private Set<Article> savedArticles = new HashSet<Article>();
 	
+	public User() {
+		
+	}
+	
+	public User(String name, String email, String password) {
+		setName(name);
+		setEmail(email);
+		setPassword(password);
+	}
 	
 	public long getId() {
 		return id;
@@ -85,13 +96,13 @@ public class User {
 		this.savedArticles = savedArticles;
 	}
 
-	public User() {
-		
+	public boolean isLoggedIn() {
+		return loggedIn;
+	}
+
+	public void setLoggedIn(boolean loggedIn) {
+		this.loggedIn = loggedIn;
 	}
 	
-	public User(String name, String email, String password) {
-		setName(name);
-		setEmail(email);
-		setPassword(password);
-	}
+
 }
