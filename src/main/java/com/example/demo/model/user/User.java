@@ -1,13 +1,17 @@
 package com.example.demo.model.user;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
+import com.example.demo.model.UserArticle.UserArticle;
 import com.example.demo.model.article.Article;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,8 +19,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinColumns;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+
+//User is the owner, so operations to saved article or delete articles is done by set user
 @Entity
 @Table(name = "users")
 public class User {
@@ -35,16 +42,10 @@ public class User {
 	private String password;
 	
     private boolean loggedIn;
-	
-	@ManyToMany(cascade = {
-        CascadeType.ALL
-    })
-	@JoinTable(
-			name = "savedArticle",
-			joinColumns = @JoinColumn(name = "user_id"),
-			inverseJoinColumns = @JoinColumn(name = "article_id")
-			)
-	private Set<Article> savedArticles = new HashSet<Article>();
+    
+	@JsonIgnore
+	@OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	private Set<UserArticle> savedArticles = new HashSet<>();
 	
 	public User() {
 		
@@ -88,11 +89,11 @@ public class User {
 		this.password = password;
 	}
 
-	public Set<Article> getSavedArticles() {
+	public Set<UserArticle> getSavedArticles() {
 		return savedArticles;
 	}
 
-	public void setSavedArticles(Set<Article> savedArticles) {
+	public void setSavedArticles(Set<UserArticle> savedArticles) {
 		this.savedArticles = savedArticles;
 	}
 
@@ -104,5 +105,24 @@ public class User {
 		this.loggedIn = loggedIn;
 	}
 	
-
+	public void addArticle(Article article) {
+        UserArticle userArticle = new UserArticle(this, article);
+        savedArticles.add(userArticle);
+        article.getUsers().add(userArticle);
+    }
+ 
+    public void removeArticle(Article article) {
+        for (Iterator<UserArticle> iterator = savedArticles.iterator();
+             iterator.hasNext(); ) {
+            UserArticle userArticle = iterator.next();
+             
+            if (userArticle.getUser().equals(this) &&
+                    userArticle.getArticle().equals(article)) {
+                iterator.remove();
+                userArticle.getArticle().getUsers().remove(userArticle);
+                userArticle.setUser(null);
+                userArticle.setArticle(null);
+            }
+        }
+    }
 }
