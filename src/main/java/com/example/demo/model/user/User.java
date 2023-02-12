@@ -25,7 +25,7 @@ import jakarta.persistence.Table;
 
 //User is the owner, so operations to saved article or delete articles is done by set user
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 
 	@Id
@@ -41,10 +41,21 @@ public class User {
 	@Column(name = "password")
 	private String password;
 	
+    private boolean loggedIn;
+    
 	@JsonIgnore
 	@OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private Set<UserArticle> savedArticles = new HashSet<>();
 	
+	public User() {
+		
+	}
+	
+	public User(String name, String email, String password) {
+		setName(name);
+		setEmail(email);
+		setPassword(password);
+	}
 	
 	public long getId() {
 		return id;
@@ -86,14 +97,12 @@ public class User {
 		this.savedArticles = savedArticles;
 	}
 
-	public User() {
-		
+	public boolean isLoggedIn() {
+		return loggedIn;
 	}
-	
-	public User(String name, String email, String password) {
-		this.name = name;
-		this.email = email;
-		this.password = password;
+
+	public void setLoggedIn(boolean loggedIn) {
+		this.loggedIn = loggedIn;
 	}
 	
 	public void addArticle(Article article) {
