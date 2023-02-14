@@ -26,13 +26,13 @@ public class UserController {
 	UserRepository userRepo;
 	
 	@PostMapping("/signup")
-	public ResponseEntity<User> signUpUser(@Validated @RequestBody User user, @PathVariable String email){
+	public ResponseEntity<User> signUpUser(@Validated @RequestBody User user){
 		try {
 			if(userRepo.findByEmail(user.getEmail()).isPresent()) {
 				return new ResponseEntity<>(HttpStatus.CONFLICT);
 			}
 			else {
-				User newUser = new User();
+				User newUser = new User(user.getName(), user.getEmail(), user.getPassword());
 				userRepo.save(newUser);
 				return new ResponseEntity<>(newUser, HttpStatus.CREATED);
 			}
@@ -45,14 +45,12 @@ public class UserController {
 	@PostMapping("/signin")
 	public ResponseEntity<User> signInUser(@Validated @RequestBody User user) {
 		try {
-			List<User> users = userRepo.findAll();
-			
-			for (User other : users) {
-				if(other.equals(user)) {
-					user.setLoggedIn(true);
-			        userRepo.save(user);
-					return new ResponseEntity<>(HttpStatus.OK);
+			if(userRepo.findByEmail(user.getEmail()).isPresent()){
+				User other = userRepo.findByEmail(user.getEmail()).get();
+				if(other.getPassword().equals(user.getPassword()) ){
+					return new ResponseEntity<>(other, HttpStatus.OK);
 				}
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
@@ -60,18 +58,6 @@ public class UserController {
 		}
 	}
 	
-	@PostMapping("/signout")
-	public ResponseEntity<User> signOutUser(@Validated @RequestBody User user) {
-		List<User> users = userRepo.findAll();
-		
-        for (User other : users) {
-            if (other.equals(user)) {
-                user.setLoggedIn(false);
-                userRepo.save(user);
-                return new ResponseEntity<>(HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-	}
+	
 
 }

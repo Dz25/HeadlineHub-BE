@@ -82,6 +82,7 @@ public class UserArticle {
 	public UserArticle(User user, Article article) {
 		this.user = user;
 		this.article = article;
+		this.id = new UserArticleKey(user.getId(), article.getId());
 	}
 	
 }

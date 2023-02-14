@@ -41,20 +41,24 @@ public class User {
 	@Column(name = "password")
 	private String password;
 	
-    private boolean loggedIn;
     
 	@JsonIgnore
-	@OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	private Set<UserArticle> savedArticles = new HashSet<>();
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	private Set<UserArticle> articles = new HashSet<>();
 	
 	public User() {
 		
 	}
-	
+
+	public User(String email, String password){
+		this.email = email;
+		this.password = password;
+	}
+
 	public User(String name, String email, String password) {
-		setName(name);
-		setEmail(email);
-		setPassword(password);
+		this.name = name;
+		this.email = email;
+		this.password = password;
 	}
 	
 	public long getId() {
@@ -89,30 +93,23 @@ public class User {
 		this.password = password;
 	}
 
-	public Set<UserArticle> getSavedArticles() {
-		return savedArticles;
+	public Set<UserArticle> getArticles() {
+		return articles;
 	}
 
-	public void setSavedArticles(Set<UserArticle> savedArticles) {
-		this.savedArticles = savedArticles;
+	public void setArticles(Set<UserArticle> articles) {
+		this.articles = articles;
 	}
 
-	public boolean isLoggedIn() {
-		return loggedIn;
-	}
-
-	public void setLoggedIn(boolean loggedIn) {
-		this.loggedIn = loggedIn;
-	}
 	
 	public void addArticle(Article article) {
         UserArticle userArticle = new UserArticle(this, article);
-        savedArticles.add(userArticle);
+        articles.add(userArticle);
         article.getUsers().add(userArticle);
     }
  
     public void removeArticle(Article article) {
-        for (Iterator<UserArticle> iterator = savedArticles.iterator();
+        for (Iterator<UserArticle> iterator = articles.iterator();
              iterator.hasNext(); ) {
             UserArticle userArticle = iterator.next();
              
