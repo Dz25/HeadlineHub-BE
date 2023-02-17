@@ -19,12 +19,12 @@ import com.example.demo.model.article.ArticleRepository;
 
 @CrossOrigin(origins = "http://localhost:8081")  // used for vue.js later
 @RestController
-@RequestMapping("/api/article")
+@RequestMapping("/api/articles")
 public class ArticleController {
 	@Autowired
 	ArticleRepository articleRepo;
 	
-	@GetMapping("/article/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<Article> getArticle(@PathVariable Long id){
 		try {
 			Optional<Article> article = articleRepo.findById(id);
@@ -37,7 +37,7 @@ public class ArticleController {
 		}
 	}
 	
-	@PostMapping("/article")
+	@PostMapping("/")
 	public ResponseEntity<Article> createArticle(@RequestBody Article article){
 		try {
 			if(articleRepo.findByUrl(article.getUrl()).isPresent()) {

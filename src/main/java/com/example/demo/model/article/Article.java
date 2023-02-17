@@ -39,7 +39,7 @@ public class Article {
 	private String url;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	Set<UserArticle> users =  new HashSet<>();
 
 	public long getId() {
