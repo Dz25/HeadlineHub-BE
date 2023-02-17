@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,6 +59,21 @@ public class UserController {
 		}
 	}
 	
+	@GetMapping("/{id}/articales")
+	public ResponseEntity<User> getSaveUsers(@PathVariable Long id){
+		try {
+		  Optional<User> user1= userRepo.findById(id);
+		  if(user1.isPresent()){
+			  User newUser= user1.get();
+			  newUser.getArticles();
+			  return new ResponseEntity<>(newUser, HttpStatus.OK);
+		  }
+		  return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		  
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
 
 }
