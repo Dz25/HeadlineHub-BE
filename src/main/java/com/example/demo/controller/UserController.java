@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.model.article.Article;
 import com.example.demo.model.user.User;
 import com.example.demo.model.user.UserRepository;
 
@@ -25,6 +26,7 @@ public class UserController {
 	
 	@Autowired
 	UserRepository userRepo;
+	
 	
 	@PostMapping("/signup")
 	public ResponseEntity<User> signUpUser(@Validated @RequestBody User user){
@@ -73,6 +75,22 @@ public class UserController {
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	@PostMapping("/{id}/savearticales")
+	public ResponseEntity<User> savePost(@PathVariable Long id , @Validated @RequestBody  Article article){
+		try {
+			  Optional<User> user1= userRepo.findById(id);
+			  if(user1.isPresent()){
+				  User newUser= user1.get();
+				  newUser.addArticle(article);
+				  return new ResponseEntity<>(newUser, HttpStatus.OK);
+			  }
+			  return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			  
+			} catch (Exception e) {
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		
 	}
 	
 
