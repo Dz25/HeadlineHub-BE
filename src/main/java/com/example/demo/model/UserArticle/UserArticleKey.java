@@ -36,7 +36,6 @@ public class UserArticleKey implements Serializable{
 	}
 	
 	public UserArticleKey(Long userId, Long articleId) {
-		super();
 		this.userId = userId;
 		this.articleId = articleId;
 	}
