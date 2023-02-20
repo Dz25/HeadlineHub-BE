@@ -1,7 +1,11 @@
 package com.example.demo.controller;
 
+import java.util.List;
 import java.util.Optional;
 
+import com.example.demo.model.articleComment.ArticleComment;
+import com.example.demo.model.articleComment.ArticleCommentRepository;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +27,10 @@ import com.example.demo.model.article.ArticleRepository;
 public class ArticleController {
 	@Autowired
 	ArticleRepository articleRepo;
-	
+
+	@Autowired
+	ArticleCommentRepository articleCommentRepo;
+
 	@GetMapping("/{id}")
 	public ResponseEntity<Article> getArticle(@PathVariable Long id){
 		try {
@@ -36,19 +43,47 @@ public class ArticleController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	@PostMapping("/")
+
+	//Call this before add comment on the FE to get the article ID
+	@PostMapping("")
 	public ResponseEntity<Article> createArticle(@RequestBody Article article){
 		try {
-			if(articleRepo.findByUrl(article.getUrl()).isPresent()) {
-				return new ResponseEntity<>(HttpStatus.CONFLICT);
+			Optional<Article> theArticle = articleRepo.findByUrl(article.getUrl());
+			if(theArticle.isPresent()) {
+				return new ResponseEntity<>(theArticle.get(),HttpStatus.CONFLICT);
 			}
 			Article newArticle = new Article();
 			articleRepo.save(newArticle);
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<>(newArticle, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
+	@PostMapping("/{id}/comments")
+	public ResponseEntity<Article> createArticleComment(@PathVariable String articleId, @RequestBody ObjectNode objNode){
+		try {
+			String commentStr = objNode.get("comment").asText();
+			String userId = objNode.get("userId").asText();
+			Article theArticle = articleRepo.findById(articleId).get();
+			ArticleComment comment = new ArticleComment(commentStr,Long.parseLong(userId),theArticle);
+			articleCommentRepo.save(comment);
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		}catch (Exception e){
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/{id}/comments")
+	public ResponseEntity<List<ArticleComment>> getArticleComment(@PathVariable String articleId){
+		try{
+			List<ArticleComment> result = articleCommentRepo.findByArticleId(articleId);
+			if(result.isEmpty()){
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<>(result,HttpStatus.OK);
+		}catch (Exception e){
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

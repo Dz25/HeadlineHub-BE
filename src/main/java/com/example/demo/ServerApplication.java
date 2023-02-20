@@ -27,7 +27,7 @@ public class ServerApplication {
 			articleRepo.save(new Article("a","a","a","a"));
 			articleRepo.save(new Article("b","b","b","b"));
 			articleRepo.save(new Article("c","c","c","c"));
-			System.out.println("as");
+
 		};
 	}
 

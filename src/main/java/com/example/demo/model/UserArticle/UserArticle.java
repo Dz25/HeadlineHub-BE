@@ -28,10 +28,7 @@ public class UserArticle {
 	@MapsId("articleId")
 	@JoinColumn(name = "article_id")
 	private Article article;
-	
-	@Column(name = "comment")
-	private String comment;
-	
+
 	@Column(name = "created_on")
     private LocalDate createdOn =  LocalDate.now();
 
@@ -57,14 +54,6 @@ public class UserArticle {
 
 	public void setArticle(Article article) {
 		this.article = article;
-	}
-
-	public String getComment() {
-		return comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
 	}
 
 	public LocalDate getCreatedOn() {
