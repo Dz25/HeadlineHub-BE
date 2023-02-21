@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,9 +64,14 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	//this method is to access saved post by user to read later 
+
+
 	
 	@GetMapping("/{id}/articles")
 	public ResponseEntity<User> getArticles(@PathVariable Long id){
+
 		try {
 		  Optional<User> user1= userRepo.findById(id);
 		  if(user1.isPresent()){
@@ -73,12 +79,15 @@ public class UserController {
 			  newUser.getArticles();
 			  return new ResponseEntity<>(newUser, HttpStatus.OK);
 		  }
-		  return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		  
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	//this method is  save post by user to read later.
+
 	@PostMapping("/{id}/articles")
 	public ResponseEntity<User> savePost(@PathVariable Long id , @Validated @RequestBody  Article article){
 		try {
@@ -92,7 +101,24 @@ public class UserController {
 				  newUser.addArticle(article);
 				  return new ResponseEntity<>(newUser, HttpStatus.CREATED);
 			  }
-			  return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			  
+			} catch (Exception e) {
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		
+	}
+	//this method is to delete saved post by user to read 
+	@DeleteMapping("/{id}/articles")
+	public ResponseEntity<HttpStatus>deletSavedPost(@PathVariable Long id , @Validated @RequestBody  Article article){
+		try {
+			  Optional<User> user1= userRepo.findById(id);
+			  if(user1.isPresent()){
+				  User newUser= user1.get();
+				  newUser.removeArticle(article);
+				  return new ResponseEntity<>( HttpStatus.OK);
+			  }
+			  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			  
 			} catch (Exception e) {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
