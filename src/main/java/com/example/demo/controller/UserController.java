@@ -108,7 +108,7 @@ public class UserController {
 			}
 		
 	}
-	//this method is to delete saved post by user to read later
+	//this method is to delete saved post by user to read later.
 	@DeleteMapping("/{id}/articles")
 	public ResponseEntity<HttpStatus>deletSavedPost(@PathVariable Long id , @Validated @RequestBody  Article article){
 		try {
