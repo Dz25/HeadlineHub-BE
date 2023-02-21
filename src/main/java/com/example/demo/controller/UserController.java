@@ -86,7 +86,7 @@ public class UserController {
 		}
 	}
 
-	//this method is  save post by user to read later
+	//this method is  save post by user to read later.
 
 	@PostMapping("/{id}/articles")
 	public ResponseEntity<User> savePost(@PathVariable Long id , @Validated @RequestBody  Article article){
