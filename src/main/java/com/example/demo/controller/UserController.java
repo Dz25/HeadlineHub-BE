@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.demo.model.article.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,9 @@ public class UserController {
 	
 	@Autowired
 	UserRepository userRepo;
-	
+	@Autowired
+	ArticleRepository articleRepo;
+
 	
 	@PostMapping("/signup")
 	public ResponseEntity<User> signUpUser(@Validated @RequestBody User user){
@@ -61,9 +64,14 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 	//this method is to access saved post by user to read later 
+
+
+	
 	@GetMapping("/{id}/articles")
-	public ResponseEntity<User> getSavedUsers(@PathVariable Long id){
+	public ResponseEntity<User> getArticles(@PathVariable Long id){
+
 		try {
 		  Optional<User> user1= userRepo.findById(id);
 		  if(user1.isPresent()){
@@ -77,13 +85,19 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 	//this method is  save post by user to read later
+
 	@PostMapping("/{id}/articles")
 	public ResponseEntity<User> savePost(@PathVariable Long id , @Validated @RequestBody  Article article){
 		try {
 			  Optional<User> user1= userRepo.findById(id);
 			  if(user1.isPresent()){
 				  User newUser= user1.get();
+				  Optional<Article> otherArticle = articleRepo.findByUrl(article.getUrl());
+				  if (!otherArticle.isPresent()){
+					  articleRepo.save(article);
+				  }
 				  newUser.addArticle(article);
 				  return new ResponseEntity<>(newUser, HttpStatus.CREATED);
 			  }
