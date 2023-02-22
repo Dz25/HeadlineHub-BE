@@ -31,6 +31,20 @@ public class ArticleController {
 	@Autowired
 	ArticleCommentRepository articleCommentRepo;
 
+	//This is for testing purpose, will not be used in the FE
+	@GetMapping("")
+	public ResponseEntity<List<Article>> getAllArticle(){
+		try {
+			List<Article> result = articleRepo.findAll();
+			if(!result.isEmpty()) {
+				return new ResponseEntity<>(result, HttpStatus.OK);
+			}
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@GetMapping("/{id}")
 	public ResponseEntity<Article> getArticle(@PathVariable Long id){
 		try {
