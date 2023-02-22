@@ -38,9 +38,9 @@ public class Article {
 	@Column(name = "url")
 	private String url;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	Set<UserArticle> users =  new HashSet<>();
+//	@JsonIgnore
+//	@OneToMany( fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//	Set<UserArticle> users =  new HashSet<>();
 
 	public long getId() {
 		return id;
@@ -82,13 +82,13 @@ public class Article {
 		this.url = url;
 	}
 
-	public Set<UserArticle> getUsers() {
-		return users;
-	}
-
-	public void setUsers(Set<UserArticle> users) {
-		this.users = users;
-	}
+//	public Set<UserArticle> getUsers() {
+//		return users;
+//	}
+//
+//	public void setUsers(Set<UserArticle> users) {
+//		this.users = users;
+//	}
 
 	public Article() {
 

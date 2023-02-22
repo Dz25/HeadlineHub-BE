@@ -1,6 +1,7 @@
 package com.example.demo.model.UserArticle;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import com.example.demo.model.article.Article;
 import com.example.demo.model.user.User;
@@ -19,6 +20,24 @@ public class UserArticle {
 	@EmbeddedId
 	private UserArticleKey id;
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(article, user);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserArticle other = (UserArticle) obj;
+		return Objects.equals(article, other.article)
+				&&  Objects.equals(user, other.user);
+	}
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("userId")
 	@JoinColumn(name = "user_id")

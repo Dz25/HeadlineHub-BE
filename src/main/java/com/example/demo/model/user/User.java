@@ -104,19 +104,19 @@ public class User {
 	
 	public void addArticle(Article article) {
         UserArticle userArticle = new UserArticle(this, article);
-        articles.add(userArticle);
-        article.getUsers().add(userArticle);
+        this.articles.add(userArticle);
+//        article.getUsers().add(userArticle);
     }
  
     public void removeArticle(Article article) {
-        for (Iterator<UserArticle> iterator = articles.iterator();
+        for (Iterator<UserArticle> iterator = this.articles.iterator();
              iterator.hasNext(); ) {
             UserArticle userArticle = iterator.next();
              
             if (userArticle.getUser().equals(this) &&
                     userArticle.getArticle().equals(article)) {
                 iterator.remove();
-                userArticle.getArticle().getUsers().remove(userArticle);
+//                userArticle.getArticle().getUsers().remove(userArticle);
                 userArticle.setUser(null);
                 userArticle.setArticle(null);
             }
