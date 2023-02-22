@@ -109,16 +109,18 @@ public class UserController {
 		
 	}
 	//this method is to delete saved post by user to read 
-	@DeleteMapping("/{id}/articles")
-	public ResponseEntity<HttpStatus>deletSavedPost(@PathVariable Long id , @Validated @RequestBody  Article article){
+	@DeleteMapping("/{id1}/articles/{id2}")
+	public ResponseEntity<HttpStatus>deleteSavedPost(@PathVariable("id1") Long id ,@PathVariable("id2") Long articleId){
 		try {
 			  Optional<User> user1= userRepo.findById(id);
-			  if(user1.isPresent()){
+			  Optional<Article> articleOpt = articleRepo.findById(articleId);
+			  if(user1.isPresent() && articleOpt.isPresent()){
 				  User newUser= user1.get();
+				  Article article = articleOpt.get();
 				  newUser.removeArticle(article);
 				  return new ResponseEntity<>( HttpStatus.OK);
 			  }
-			  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			  return new ResponseEntity<>(HttpStatus.CONFLICT);
 			  
 			} catch (Exception e) {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
