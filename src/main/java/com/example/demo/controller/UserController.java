@@ -57,9 +57,8 @@ public class UserController {
 				if(other.getPassword().equals(user.getPassword()) ){
 					return new ResponseEntity<>(other, HttpStatus.OK);
 				}
-				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
