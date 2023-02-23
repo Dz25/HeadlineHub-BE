@@ -1,25 +1,16 @@
 package com.example.demo.model.article;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import com.example.demo.model.UserArticle.UserArticle;
-import com.example.demo.model.user.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "article")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Article {
 
 	@Id
@@ -37,10 +28,6 @@ public class Article {
 
 	@Column(name = "url")
 	private String url;
-	
-	@JsonIgnore
-	@OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	Set<UserArticle> users =  new HashSet<>();
 
 	public long getId() {
 		return id;
@@ -80,14 +67,6 @@ public class Article {
 
 	public void setUrl(String url) {
 		this.url = url;
-	}
-
-	public Set<UserArticle> getUsers() {
-		return users;
-	}
-
-	public void setUsers(Set<UserArticle> users) {
-		this.users = users;
 	}
 
 	public Article() {
