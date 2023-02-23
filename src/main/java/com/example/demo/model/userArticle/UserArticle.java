@@ -1,4 +1,4 @@
-package com.example.demo.model.UserArticle;
+package com.example.demo.model.userArticle;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -6,13 +6,7 @@ import java.util.Objects;
 import com.example.demo.model.article.Article;
 import com.example.demo.model.user.User;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
+import jakarta.persistence.*;
 
 @Entity
 public class UserArticle {

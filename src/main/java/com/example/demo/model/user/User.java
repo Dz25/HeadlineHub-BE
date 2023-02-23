@@ -1,10 +1,9 @@
 package com.example.demo.model.user;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
-import com.example.demo.model.UserArticle.UserArticle;
+import com.example.demo.model.userArticle.UserArticle;
 import com.example.demo.model.article.Article;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -15,10 +14,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinColumns;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -43,7 +38,7 @@ public class User {
 	
     
 	@JsonIgnore
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private Set<UserArticle> articles = new HashSet<>();
 	
 	public User() {
@@ -109,17 +104,7 @@ public class User {
     }
  
     public void removeArticle(Article article) {
-        for (Iterator<UserArticle> iterator = this.articles.iterator();
-             iterator.hasNext(); ) {
-            UserArticle userArticle = iterator.next();
-             
-            if (userArticle.getUser().equals(this) &&
-                    userArticle.getArticle().equals(article)) {
-                iterator.remove();
-//                userArticle.getArticle().getUsers().remove(userArticle);
-                userArticle.setUser(null);
-                userArticle.setArticle(null);
-            }
-        }
+        UserArticle userArticle = new UserArticle(this,article);
+		this.articles.remove(userArticle);
     }
 }

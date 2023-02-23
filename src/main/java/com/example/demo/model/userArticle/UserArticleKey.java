@@ -1,4 +1,4 @@
-package com.example.demo.model.UserArticle;
+package com.example.demo.model.userArticle;
 
 import java.io.Serializable;
 import java.util.Objects;

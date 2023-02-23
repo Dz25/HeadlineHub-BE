@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import com.example.demo.model.UserArticle.UserArticle;
+import com.example.demo.model.userArticle.UserArticle;
 import com.example.demo.model.article.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -76,8 +76,6 @@ public class UserController {
             Optional<User> user1 = userRepo.findById(id);
             if (user1.isPresent()) {
                 User newUser = user1.get();
-                System.out.println(newUser);
-                System.out.println(newUser.getArticles());
                 Set<UserArticle> res = newUser.getArticles();
                 List<Article> finalRes = new LinkedList<>();
                 for (UserArticle userArticle : res) {
@@ -123,7 +121,7 @@ public class UserController {
 
     //this method is to delete saved post by user to read
     @DeleteMapping("/{id1}/articles/{id2}")
-    public ResponseEntity<HttpStatus> deleteSavedPost(@PathVariable("id1") Long id, @PathVariable("id2") Long articleId) {
+    public ResponseEntity<Article> deleteSavedPost(@PathVariable("id1") String id, @PathVariable("id2") String articleId) {
         try {
             Optional<User> user1 = userRepo.findById(id);
             Optional<Article> articleOpt = articleRepo.findById(articleId);
@@ -131,7 +129,8 @@ public class UserController {
                 User newUser = user1.get();
                 Article article = articleOpt.get();
                 newUser.removeArticle(article);
-                return new ResponseEntity<>(HttpStatus.OK);
+                userRepo.save(newUser);
+                return new ResponseEntity<>(article,HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.CONFLICT);
 

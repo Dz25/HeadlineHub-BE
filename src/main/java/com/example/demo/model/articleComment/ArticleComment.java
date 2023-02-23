@@ -29,7 +29,6 @@ public class ArticleComment {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "article_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
     private Article article;
 
     public Long getId() {
