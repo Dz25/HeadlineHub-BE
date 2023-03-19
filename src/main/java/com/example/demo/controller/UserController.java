@@ -101,7 +101,7 @@ public class UserController {
                 User newUser = user1.get();
                 Optional<Article> otherArticle = articleRepo.findByUrl(article.getUrl());
                 if (!otherArticle.isPresent()) {
-                    Article article1 = new Article(article.getTitle(), article.getDescription(), article.getSummary(), article.getUrl());
+                    Article article1 = new Article(article.getTitle(), article.getUrlToImage(), article.getSummary(), article.getUrl());
                     articleRepo.save(article1);
                     newUser.addArticle(article1);
                 } else {
