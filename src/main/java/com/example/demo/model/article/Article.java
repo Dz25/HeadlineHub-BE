@@ -20,8 +20,8 @@ public class Article {
 	@Column(name = "title")
 	private String title;
 
-	@Column(name = "description")
-	private String description;
+	@Column(name = "urlToImage")
+	private String urlToImage;
 
 	@Column(name = "summary")
 	private String summary;
@@ -45,12 +45,12 @@ public class Article {
 		this.title = title;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getUrlToImage() {
+		return urlToImage;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setUrlToImage(String urlToImage) {
+		this.urlToImage = urlToImage;
 	}
 
 	public String getSummary() {
@@ -73,9 +73,9 @@ public class Article {
 
 	}
 
-	public Article(String title, String description, String summary, String url) {
+	public Article(String title, String urlToImage, String summary, String url) {
 		this.title = title;
-		this.description = description;
+		this.urlToImage = urlToImage;
 		this.summary = summary;
 		this.url = url;
 	}

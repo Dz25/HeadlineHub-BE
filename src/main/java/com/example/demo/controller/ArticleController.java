@@ -66,7 +66,7 @@ public class ArticleController {
             if (theArticle.isPresent()) {
                 return new ResponseEntity<>(theArticle.get(), HttpStatus.CONFLICT);
             }
-            Article newArticle = new Article(article.getTitle(), article.getDescription(), article.getSummary(), article.getUrl());
+            Article newArticle = new Article(article.getTitle(), article.getUrlToImage(), article.getSummary(), article.getUrl());
             articleRepo.save(newArticle);
             return new ResponseEntity<>(newArticle, HttpStatus.CREATED);
         } catch (Exception e) {
