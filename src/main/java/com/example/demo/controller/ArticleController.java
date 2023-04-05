@@ -24,7 +24,7 @@ import com.example.demo.model.article.ArticleRepository;
 @CrossOrigin(origins = "http://localhost:8081")  // used for vue.js later
 @RestController
 @RequestMapping("/api/articles")
-public class ArticleController {
+public class    ArticleController {
     @Autowired
     ArticleRepository articleRepo;
 
@@ -64,12 +64,13 @@ public class ArticleController {
         try {
             Optional<Article> theArticle = articleRepo.findByUrl(article.getUrl());
             if (theArticle.isPresent()) {
-                return new ResponseEntity<>(theArticle.get(), HttpStatus.CONFLICT);
+                return new ResponseEntity<>(theArticle.get(), HttpStatus.OK);
             }
             Article newArticle = new Article(article.getTitle(), article.getUrlToImage(), article.getSummary(), article.getUrl());
             articleRepo.save(newArticle);
             return new ResponseEntity<>(newArticle, HttpStatus.CREATED);
         } catch (Exception e) {
+            System.out.println(article.toString());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -79,9 +80,10 @@ public class ArticleController {
         try {
             String commentStr = objNode.get("comment").asText();
             String userId = objNode.get("userId").asText();
+            String userName = objNode.get("userName").asText();
             Optional<Article> theArticle = articleRepo.findById(articleId);
             if (theArticle.isPresent()) {
-                ArticleComment comment = new ArticleComment(commentStr, Long.parseLong(userId), theArticle.get());
+                ArticleComment comment = new ArticleComment(commentStr, userName, Long.parseLong(userId), theArticle.get());
                 articleCommentRepo.save(comment);
                 return new ResponseEntity<>(comment, HttpStatus.CREATED);
             }
