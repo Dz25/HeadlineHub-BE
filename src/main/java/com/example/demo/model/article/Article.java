@@ -1,12 +1,7 @@
 package com.example.demo.model.article;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "article")
@@ -21,12 +16,15 @@ public class Article {
 	private String title;
 
 	@Column(name = "urlToImage")
+	@Lob
 	private String urlToImage;
 
 	@Column(name = "summary")
+	@Lob
 	private String summary;
 
 	@Column(name = "url")
+	@Lob
 	private String url;
 
 	public long getId() {

@@ -17,7 +17,11 @@ public class ArticleComment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "userName")
+    private String userName;
+
     @Column(name = "comment")
+    @Lob
     private String comment;
 
     @Column(name = "userId")
@@ -37,6 +41,14 @@ public class ArticleComment {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getComment() {
@@ -75,8 +87,9 @@ public class ArticleComment {
 
     }
 
-    public ArticleComment(String comment, Long userId, Article article){
+    public ArticleComment(String comment, String userName, Long userId, Article article){
         this.comment = comment;
+        this.userName = userName;
         this.userId = userId;
         this.article = article;
         this.postedTime = LocalDate.now();
